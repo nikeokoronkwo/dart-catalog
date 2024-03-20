@@ -1,0 +1,7 @@
+name: extended_dart
+description: Exntensions to help make dart better.
+version: 1.0.0-alpha
+
+environment:
+  sdk: '>=3.0.0'
+

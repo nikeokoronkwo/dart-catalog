@@ -1,0 +1,6 @@
+name: performant_dart
+description: Create high-performace dart with this package.
+
+environment:
+  sdk: '>=3.0.0'
+
