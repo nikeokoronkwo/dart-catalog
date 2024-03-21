@@ -1,0 +1,4 @@
+name: wai_example
+
+environment:
+  sdk: '>=3.3.0'
