@@ -1,6 +1,5 @@
-import 'package:wai_vm/wai_vm.dart';
+import 'package:wai';
 
 void main() {
-  var awesome = Awesome();
-  print('awesome: ${awesome.isAwesome}');
+
 }
