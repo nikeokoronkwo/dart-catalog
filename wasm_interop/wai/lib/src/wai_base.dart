@@ -1,6 +1,6 @@
-// TODO: Put public facing types in this file.
+import 'dart:js_interop';
 
-/// Checks if you are awesome. Spoiler: you are.
-class Awesome {
-  bool get isAwesome => true;
+extension type WebAssembly._(JSObject _) {
+  external static JSPromise instantiateStreaming(JSPromise wasm, JSObject importObject);
+  external static JSPromise instantiate(JSObject wasmBuffer, JSObject importObject);
 }

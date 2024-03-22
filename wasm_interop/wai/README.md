@@ -1,39 +1,22 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# WAI - WebAssembly Interfaces
+The WAI Package is a web interface package for interoping and making use of WebAssembly directly in your web project. For making use of WAI server side or on the VM, check the `wai_vm` package.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+## Using this Package
+### Normal WebAssembly
+You can use this package to work with WebAssembly normally via the `WebAssembly` object. This object either comes as a class, for those using `wai` on the legacy `dart:html` and `package:js` packages, and as an extension type for those using the package with `package:web` and `dart:js_interop`.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+This package also comes with js implementations of helper interfaces you may need like `fetch` to get files rather than reading them via `dart:io` which isn't available on the web.
 ```dart
-const like = 'sample';
+void main() {
+    WebAssembly.instantiateStream(fetch('file.wasm'), JSObject()).toDart.then((module) {
+        // Do Something
+    });
+    // OR
+    instantiateWasm('file.wasm', {}).then((module) {
+        // Do Something
+    });
+}
 ```
+### WASM Bindings with `waigen`
+You can also generate WASM bindings between languages and work with them on Dart via the `wai` interfaces either by manually creating the bindings, or with the use of `waigen`. For more information on `waigen`, check out [the package]().
 
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
