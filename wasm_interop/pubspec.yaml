@@ -1,12 +1,9 @@
-name: wasm_interop
-description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+name: wai_workspace
+description: The WebAssembly Interface Suite of Packages
 
 environment:
-  sdk: ^3.3.1
+  sdk: '>=3.3.0'
 
-# Add regular dependencies here.
 dependencies:
   # path: ^1.8.0
 

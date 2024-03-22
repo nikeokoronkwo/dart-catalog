@@ -1,11 +1,11 @@
 name: wai
 description: >-
   WebAssembly Interface for Working with WebAssembly and interoping with other languages via WebAssembly
-version: 1.0.0
+version: 0.0.1-pre
 repository: https://github.com/nikeokoronkwo/dart_catalog
 
 environment:
-  sdk: '>=3.3.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 # Add regular dependencies here.
 dependencies:
