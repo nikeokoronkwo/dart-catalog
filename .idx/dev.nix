@@ -2,6 +2,8 @@
     channel = "stable-23.11";
     packages = [
         pkgs.apt
+        pkgs.unzip
+        pkgs.neovim
         pkgs.deno
     ];
 
@@ -16,6 +18,6 @@
     };
 
     idx.workspace.onCreate = {
-        
+
     };
 }

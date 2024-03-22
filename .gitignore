@@ -7,6 +7,10 @@ build/
 
 *.sh 
 
+# The Dart SDK:
+# IDX Doesn't use Dart 3.3.2 (uses 3.1.*)
+dart-sdk/
+
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
