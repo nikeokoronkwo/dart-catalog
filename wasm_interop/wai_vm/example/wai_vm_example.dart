@@ -1,5 +1,3 @@
-import 'package:wai';
+import 'package:wai_vm/wai_vm.dart';
 
-void main() {
 
-}
