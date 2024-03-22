@@ -1,8 +1,5 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
+/// TODO: Document
 library;
 
-export 'src/wai_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/core.dart'
+  if (dart.library.html) 'src/legacy.dart';

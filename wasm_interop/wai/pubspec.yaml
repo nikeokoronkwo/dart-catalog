@@ -1,13 +1,15 @@
 name: wai
-description: A starting point for Dart libraries or applications.
+description: >-
+  WebAssembly Interface for Working with WebAssembly and interoping with other languages via WebAssembly
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/nikeokoronkwo/dart_catalog
 
 environment:
-  sdk: ^3.3.1
+  sdk: '>=3.3.0'
 
 # Add regular dependencies here.
 dependencies:
+  js: ^0.7.1
   # path: ^1.8.0
 
 dev_dependencies:
