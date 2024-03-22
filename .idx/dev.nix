@@ -1,7 +1,7 @@
 {pkgs, ...}: {
     channel = "stable-23.11";
     packages = [
-        pkgs.dart
+        pkgs.apt
         pkgs.deno
     ];
 
@@ -15,5 +15,7 @@
         previews = [];
     };
 
-    idx.workspace.onCreate = {};
+    idx.workspace.onCreate = {
+        
+    };
 }
