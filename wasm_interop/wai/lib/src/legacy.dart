@@ -1,3 +1,3 @@
 library wai.legacy;
 
-export 'core/wai_legacy_base.dart';
+export 'legacy/wai_legacy_base.dart';
