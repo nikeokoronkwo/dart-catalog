@@ -1,6 +1,6 @@
 name: extended_dart
 description: Exntensions to help make dart better.
-version: 0.0.1-pre
+version: 0.0.1-s
 repository: https://github.com/nikeokoronkwo/dart-catalog/tree/main/extended-dart
 
 environment:
