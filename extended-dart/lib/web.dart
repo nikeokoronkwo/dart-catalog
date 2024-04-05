@@ -1,3 +1,3 @@
 library extended.web;
 
-export 'src/web/object.dart';
+export 'src/web/jsobject/jsobject.dart';
