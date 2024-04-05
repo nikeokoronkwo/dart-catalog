@@ -1,0 +1,14 @@
+name: rex
+description: >-
+  The official Dart Implementation of the Rex CLI - The tool for building, managing and creating monorepositories across various platforms.
+version: 0.0.1-pre
+repository: https://github.com/nikeokoronkwo/dart-catalog/tree/main/rex_dart
+
+executables:
+  rex:
+
+environment:
+  sdk: '^3.0.0'
+dependencies:
+  ansi: ^0.4.2
+  args: ^2.4.2
