@@ -2,7 +2,7 @@ import 'dart:js_interop';
 
 extension type Response._(JSObject _) implements JSObject {
   external Response();
-  external JSObject arrayBuffer();
+  external JSArrayBuffer arrayBuffer();
 }
 
 @JS('fetch')
