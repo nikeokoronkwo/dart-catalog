@@ -1,4 +1,4 @@
 library wai.core;
 
-export 'core/wai_base.dart';
+export 'core/core.dart';
 export 'helpers/fetch.dart';
