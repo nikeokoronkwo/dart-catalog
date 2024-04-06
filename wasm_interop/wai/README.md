@@ -1,4 +1,7 @@
 # WAI - WebAssembly Interfaces
+[![pub package](https://img.shields.io/pub/v/wai.svg)](https://pub.dev/packages/wai)
+[![Pub Points](https://img.shields.io/pub/points/wai)](https://pub.dev/packages/wai)
+
 The WAI Package is a web interface package for interoping and making use of WebAssembly directly in your web project. For making use of WAI server side or on the VM, check the `wai_vm` package.
 
 ## Using this Package
