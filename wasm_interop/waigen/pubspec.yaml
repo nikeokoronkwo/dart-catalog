@@ -6,8 +6,16 @@ repository: https://github.com/nikeokoronkwo/dart-catalog
 environment:
   sdk: ^3.3.0
 
+executables:
+  waigen-setup:
+
 # Add regular dependencies here.
 dependencies:
+  args: ^2.4.2
+  cli_util: ^0.4.1
+  glob: ^2.1.2
+  io: ^1.0.4
+  logging: ^1.2.0
   # path: ^1.8.0
 
 dev_dependencies:
