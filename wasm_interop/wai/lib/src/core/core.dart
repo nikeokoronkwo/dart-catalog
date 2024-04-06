@@ -6,6 +6,9 @@ import 'objects/wasm.dart';
 
 export 'wai_base.dart';
 export 'objects/wasm.dart';
+export 'objects/global.dart';
+export 'objects/table.dart';
+export 'objects/memory.dart';
 
 /// A more convenient for instantiating a WASM File
 /// 
