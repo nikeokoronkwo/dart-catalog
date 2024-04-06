@@ -3,7 +3,7 @@
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
+  group('wai', () {
     test('wai test', () {
       // Nothing Here For Now
       return null;
