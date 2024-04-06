@@ -2,6 +2,9 @@
 
 import 'dart:js_interop';
 import 'objects/wasm.dart';
+import 'objects/memory.dart';
+import 'objects/table.dart';
+import 'objects/global.dart';
 
 /// A WebAssembly Class Object
 extension type WebAssembly._(JSObject _) {
@@ -119,12 +122,25 @@ extension type WebAssembly._(JSObject _) {
   /// https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/validate_static
   static bool validate(JSObject wasmBuffer) => _validate(wasmBuffer).toDart;
 
-  @JS('Memory')
-  external static JSObject Memory(JSObject memoryDescriptor);
+  /// Instantiates a new `WebAssembly.Memory` Object.
+  /// 
+  /// This can be imported into C/C++ compiled WASM Modules making use of memory management.
+  /// 
+  /// The Memory given can be in either a normal `ArrayBuffer` or in a `SharedArrayBuffer`
+  /// 
+  /// https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Memory/Memory
+  static WebAssemblyMemory Memory({required int initial, int? maximum, bool? shared})
+    => WebAssemblyMemory.instantiate(initial: initial, maximum: maximum, shared: shared);
 
-  @JS('Table')
-  external static JSObject Table(JSObject tableDescriptor, [JSAny? value]);
+  /// Instantiates a new `WebAssembly.Table` Object
+  /// 
+  /// 
+  static WebAssemblyTable Table({required String element, required int initial, int? maximum, JSObject? value})
+    => WebAssemblyTable.instantiate(element: element, initial: initial, maximum: maximum, value: value);
 
-  @JS('Global')
-  external static JSObject Global(JSObject descriptor, JSAny value);
+  /// Instantiates a new `WebAssembly.Global` Object
+  /// 
+  /// https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Global
+  static JSObject Global(JSAny value, {required String descValue, required bool mutable}) 
+    => WebAssemblyGlobal.instantiate(descValue: descValue, mutable: mutable, value);
 }
