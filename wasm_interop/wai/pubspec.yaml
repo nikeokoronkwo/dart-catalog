@@ -5,7 +5,7 @@ version: 0.0.1
 repository: https://github.com/nikeokoronkwo/dart_catalog
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ^3.3.0
 
 # Add regular dependencies here.
 dependencies:
