@@ -1,7 +1,7 @@
 name: wai
 description: >-
   WebAssembly Interface for Working with WebAssembly and interoping with other languages via WebAssembly
-version: 0.0.1-pre
+version: 0.0.1
 repository: https://github.com/nikeokoronkwo/dart_catalog
 
 environment:
