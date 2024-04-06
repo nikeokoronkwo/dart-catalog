@@ -1,11 +1,17 @@
-# waigen - Generate Bindings for WASM Interop and Usage in Dart
+# WAIGEN - Generate Bindings for WASM Interop and Usage in Dart
+Waigen is an easy, powerful and feature-rich dart tool used for generating bindings for WASM code to your dart code, whether you're using it on the web (with [wai](https://pub.dev/packages/wai)), on the Dart VM (with [wai_vm](https://pub.dev/packages/wai_vm)), or even with the experimental `dart2wasm`.
+
 
 ## Installing this Tool
 Waigen depends on some of the tools included in 
 
 To use this tool, add the tool as a dev dependency to your project.
 ```yaml
+dev_dependencies:
+    waigen: <latest>
 ```
+
+You should also have either `wai` or `wai_vm` as a dependecy on your project, depending on where you are planning to use the generated bindings
 
 Then run the tool on your webassembly file:
 ```bash
@@ -18,8 +24,8 @@ If run like this, the generated code will be written to `main.wasm.dart` with de
 # Reads the wasm-config.yaml file in current directory and writes to file.dart
 dart run waigen main.wasm -o file.dart 
 
-# Reads the wasm-config.yaml file provided to --config option and writes to file provided in config
-dart run waigen --config config.yaml main.wasm 
+# Uses the wasm-config.yaml file provided to --config option and writes to file provided in config
+dart run waigen --config config.yaml
 ```
 
 For more information on the tool and options, check the help.
@@ -35,10 +41,18 @@ This tool can perform various functions such as generating Dart Objects and Bind
 
 ### Web Bindings
 If you are using this tool on the web, you will need to indicate so by passing the `--web` flag. 
-This analyzes the WASM file generated and produces an object with function definitions to represent the object exported as the `WebAssembly.Instance().exports` object. If you don't do this, `wai` would assume the exports as a `Map`. The tool also analyzes the imports needed by the WASM File and provides them 
+This analyzes the WASM file generated and produces an object with function definitions to represent the object exported as the `WebAssembly.Instance().exports` object. If you don't do this, `wai` would assume the exports as a `Map`. The tool also analyzes the imports needed by the WASM File and provides them as an object for easy usage with `wai`'s `WebAssembly` object and features.
+
+```bash
+dart run waigen --web 
+```
 
 ### `dart2wasm` Bindings
-If you are not using the tool on the we
+If you are not using the tool on the web, you can make use of WebAssembly bindings on the Dart VM when compiling to WebAssembly by leveraging the [`dart2wasm`](https://github.com/dart-lang/sdk/blob/main/pkg/dart2wasm/README.md) tool, and it's related functionality. In order to do this, you will need to pass the `--dart2wasm` flag. Remember that dart2wasm is experimental.
+
+```bash
+dart run waigen --dart2wasm
+```
 
 ### C Interop with `ffigen`
 Thanks to [wasm2c](https://github.com/WebAssembly/wabt), Waigen has the ability to interop with C code and compile WebAssembly to C source code. If you pass the `--target-c` (or `-c`) option to `waigen`, Waigen will convert the given WebAssembly to C source code, with generated header files. This can be useful if you plan on working with C code, as well as WASM code, in your project. However, if you plan to create bindings for the given C code as well, it is recommended you use this tool alongside [`ffigen`](https://pub.dev/packages/ffigen) to generate the bindings.
@@ -58,9 +72,10 @@ Then run the following command with the given WebAssembly File and JavaScript Fi
 dart run waigen --jsigen --glue <JavaScript File> <WebAssembly File> 
 ```
 
-This can be very useful if you plan on using [`dart2wasm`](). 
+This can be very useful if you plan on using dart files compiled to wasm with [`dart2wasm`](https://github.com/dart-lang/sdk/blob/main/pkg/dart2wasm/README.md). 
 
 However, note that this feature (as well as `jsigen`) is experimental, and only works on Dart Web.
 
 ## Building this Tool
-In order to build this tool, you will need the [WebAssembly Binary Toolkit (WABT)](https://github.com/WebAssembly/wabt), as well as the [dart SDK]() (obviously).
+In order to build this tool, you will need the [WebAssembly Binary Toolkit (WABT)](https://github.com/WebAssembly/wabt), as well as the [dart SDK](https://github.com/dart-lang/sdk) installed (obviously).
+
