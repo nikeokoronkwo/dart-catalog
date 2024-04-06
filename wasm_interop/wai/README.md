@@ -8,15 +8,21 @@ You can use this package to work with WebAssembly normally via the `WebAssembly`
 This package also comes with js implementations of helper interfaces you may need like `fetch` to get files rather than reading them via `dart:io` which isn't available on the web.
 ```dart
 void main() {
-    WebAssembly.instantiateStream(fetch('file.wasm'), JSObject()).toDart.then((module) {
+    WebAssembly.instantiateStream(fetch('file.wasm')).then((module) {
         // Do Something
     });
     // OR
-    instantiateWasm('file.wasm', {}).then((module) {
+    instantiateWasm('file.wasm').then((module) {
         // Do Something
     });
 }
 ```
 ### WASM Bindings with `waigen`
-You can also generate WASM bindings between languages and work with them on Dart via the `wai` interfaces either by manually creating the bindings, or with the use of `waigen`. For more information on `waigen`, check out [the package]().
+You can also generate WASM bindings between languages and work with them on Dart via the `wai` interfaces either by manually creating the bindings, or with the use of `waigen`. For more information on `waigen`, check out [the package](https://github.com/nikeokoronkwo/dart-catalog/tree/main/wasm_interop/waigen).
 
+
+## Contributing
+Contributions to this package are welcome! Please check the [contributing guidelines](https://github.com/nikeokoronkwo/dart-catalog/tree/main/wasm_interop/CONTRIBUTING.md) before making one.
+
+## License
+[BSD-3-Clause](./LICENSE)
