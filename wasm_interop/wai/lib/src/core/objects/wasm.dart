@@ -9,7 +9,8 @@ extension type WebAssemblyResult._(JSObject _) implements JSObject {
 
 @JS('WebAssembly.Instance')
 extension type WebAssemblyInstance._(JSObject _) implements JSObject {
-  external WebAssemblyInstance(WebAssemblyModule module, [JSObject? importObject]);
+  external WebAssemblyInstance(WebAssemblyModule module,
+      [JSObject? importObject]);
 
   @JS('exports')
   external JSObject get _exports;

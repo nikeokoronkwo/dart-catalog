@@ -7,6 +7,4 @@ class WebAssembly {
   external static instantiate(Object wasmBuffer, Object importObject);
 }
 
-extension WebAssemblyDeclarations on WebAssembly {
-
-}
+extension WebAssemblyDeclarations on WebAssembly {}
