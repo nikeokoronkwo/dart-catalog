@@ -1,6 +1,6 @@
 name: jsigen
-description: A starting point for Dart libraries or applications.
-version: 0.0.1-pre
+description: Generate JavaScript Objects and Bindings in Dart.
+version: 0.0.1-placeholder
 repository: https://github.com/nikeokoronkwo/dart_catalog
 
 environment:

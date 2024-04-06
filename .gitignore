@@ -11,6 +11,9 @@ build/
 # IDX Doesn't use Dart 3.3.2 (uses 3.1.*)
 dart-sdk/
 
+# WABT
+
+
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 

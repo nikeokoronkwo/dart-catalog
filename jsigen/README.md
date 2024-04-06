@@ -1,39 +1,20 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# JSIGEN - Generate JavaScript Bindings for your Dart Code
+Jsigen is a CLI tool to generate JavaScript bindings for your Dart code.
+It parses, analyzes and generates the given Dart Objects for your JavaScript code using Dart's JavaScript interop guidelines
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## Using this Tool
+By default, `jsigen` uses the latest **extension type** interop strategy to create Dart Bindings. If you are using a much older codebase, or prefer not to use this, you can use the `--legacy` flag to use the legacy **class/static interop** interop strategy to create Dart Bindings.
 
 ## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
+```bash
+dart run jsigen <js file> -o <output>
 ```
 
-## Additional information
+You can pass config located in a `js-config.yaml` file to configure the bindings generated.
+```bash
+dart run jsigen <js file> --config <config file> # The config file option is optional, and defaults to the js-config.yaml file in the root directory
+```
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+> **NOTE**: This project is experimental and nothing works for now.
+> 
+> Contributions and ideas are welcome

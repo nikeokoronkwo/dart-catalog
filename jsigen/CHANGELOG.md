@@ -1,3 +1,3 @@
-## 1.0.0
+## 0.0.1-placeholder
 
-- Initial version.
+- Placeholder version.
