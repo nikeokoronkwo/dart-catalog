@@ -13,4 +13,6 @@ void main() {
   }).then((instance) {
     print((instance as WebAssemblyInstance).exports['sumofsquares'](9));
   });
+  final mem = WebAssembly.Memory(initial: 10, maximum: 100);
+  print(mem.buffer);
 }
