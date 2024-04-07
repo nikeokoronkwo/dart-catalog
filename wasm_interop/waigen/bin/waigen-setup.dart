@@ -1,5 +1,8 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:io/io.dart';
 
@@ -39,10 +42,11 @@ void printUsage(ArgParser argParser) {
   print(argParser.usage);
 }
 
-void handle(ArgResults results, ArgParser parser) {
+void handle(ArgResults results, ArgParser parser) async {
   // Prereq
   var watch = Stopwatch();
-  void _print(Object msg) => print("${watch.elapsed}: $msg");
+  void _println(Object msg) => print("${watch.elapsed}: $msg");
+  void _print(Object msg) => stdout.write("${watch.elapsed}: $msg");
 
   // Handle Args
 
@@ -51,28 +55,35 @@ void handle(ArgResults results, ArgParser parser) {
   watch.start();
 
   // Check if necessary tools are present on system
-  _print("Checking if necessary tools are present on system");
+  _println("Checking if necessary tools are present on system");
+  List<String> args = [];
+  if (!results['cmake']) args.add('--top-level');
+  if (results.wasParsed('verbose')) args.add('--verbose');
+  if (Platform.isWindows) args.add('--win');
+  final res = await manager.spawn('dart', ['run', 'scripts/check.dart'], runInShell: true);
+  
   
   if (results.wasParsed('check')) {
-    kill(_print, watch);
+    kill(_println, watch);
     return;
   }
   
   // Fetch WABT
-  _print(
+  _println(
     "Fetching WABT",
   );
   // Build WABT
-  _print(
+  _println(
     "Building WABT",
   );
 
   // End
-  kill(_print, watch);
+  kill(_println, watch);
 }
 
-void kill(void Function(Object) write, Stopwatch watch) {
+void kill(void Function(Object) write, Stopwatch watch, {bool success = true}) {
   write("Complete");
   watch.stop();
+  exit(success ? 0 : 1);
 }
 
