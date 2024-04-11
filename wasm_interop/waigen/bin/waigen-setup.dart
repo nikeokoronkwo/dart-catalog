@@ -60,7 +60,13 @@ void handle(ArgResults results, ArgParser parser) async {
   if (!results['cmake']) args.add('--top-level');
   if (results.wasParsed('verbose')) args.add('--verbose');
   if (Platform.isWindows) args.add('--win');
-  final res = await manager.spawn('dart', ['run', 'scripts/check.dart'], runInShell: true);
+  final res = await manager.spawnDetached('dart', ['scripts/check.dart'] + args);
+  res.stdout.transform(utf8.decoder).listen(stdout.write);
+  res.stderr.transform(utf8.decoder).listen(stderr.write);
+  if (await res.exitCode != 0) {
+    kill(_println, watch, success: false);
+    return;
+  }
   
   
   if (results.wasParsed('check')) {

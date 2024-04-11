@@ -123,7 +123,7 @@ Future<int> checkForMSVCOrMingw(Logger logger, List<String> args, cli.Logger ver
   Process? process;
   try {
     process = await manager.spawnDetached('scripts/helpers/check-mingw.bat', []);
-  } on ProcessException catch (e) {
+  } on ProcessException catch (_) {
     logger.shout("Could not check for MinGW: Permission Denied");
     process = null;
   } catch (e) {
