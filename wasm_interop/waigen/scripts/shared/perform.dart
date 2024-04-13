@@ -14,14 +14,18 @@ Future<void> perform(
     String? dir,
     String error = "Unknown Error",
     bool warn = false,
-    String? warnMsg
+    String? warnMsg,
+    bool runInShell = false
 }) async {
   var result = await manager.spawnDetached(
     command, arguments
-  , workingDirectory: dir);
+  , workingDirectory: dir, runInShell: runInShell);
   result.stdout.transform(utf8.decoder).listen((event) {
-    logger.config(event.trim());
-    verboselogger.trace(event.trim());
+    if (verboselogger is! cli.VerboseLogger) {
+      logger.config(event.trim());
+    } else {
+      verboselogger.trace(event.trim());
+    }
   });
   result.stderr.transform(utf8.decoder).listen((event) {
     verboselogger.trace(red.wrap(event.trim())!);
