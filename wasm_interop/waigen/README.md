@@ -1,8 +1,12 @@
 # WAIGEN - Generate Bindings for WASM Interop and Usage in Dart
 Waigen is an easy, powerful and feature-rich dart tool used for generating bindings for WASM code to your dart code, whether you're using it on the web (with [wai](https://pub.dev/packages/wai)), on the Dart VM (with [wai_vm](https://pub.dev/packages/wai_vm)), or even with the experimental `dart2wasm`.
 
+## Getting Started
 
-## Installing this Tool
+### Setup with `waigen-setup`
+In order to use `waigen`, you will need to install the webassembly binary toolkit. In order to streamline this process, you can run the `waigen-setup` command to fetch and install WABT and other tools needed for `waigen` to work properly.
+
+### Installing this Tool
 Waigen depends on some of the tools included in 
 
 To use this tool, add the tool as a dev dependency to your project.
@@ -57,7 +61,7 @@ dart run waigen --dart2wasm
 ### C Interop with `ffigen`
 Thanks to [wasm2c](https://github.com/WebAssembly/wabt), Waigen has the ability to interop with C code and compile WebAssembly to C source code. If you pass the `--target-c` (or `-c`) option to `waigen`, Waigen will convert the given WebAssembly to C source code, with generated header files. This can be useful if you plan on working with C code, as well as WASM code, in your project. However, if you plan to create bindings for the given C code as well, it is recommended you use this tool alongside [`ffigen`](https://pub.dev/packages/ffigen) to generate the bindings.
 
-### With `jsigen`
+### (Experimental) With `jsigen`
 In the case you do ultimately need to couple your given WebAssembly with some JavaScript, you can do so by pairing `waigen` with [`jsigen`](https://pub.dev/packages/jsigen). `waigen` will produce the WebAssembly bindings, while `jsigen` will port the given functions and generated glue code from the JavaScript file to Dart.
 
 Add `jsigen` as a dev dependency to your project.
@@ -76,6 +80,8 @@ This can be very useful if you plan on using dart files compiled to wasm with [`
 
 However, note that this feature (as well as `jsigen`) is experimental, and only works on Dart Web.
 
+### (Experimental) with `wai_vm`'s normal wasm support
+> NOTE: This feature is experimental and depends on the [seagort package](https://pub.dev/packages/seagort).
+
 ## Building this Tool
 In order to build this tool, you will need the [WebAssembly Binary Toolkit (WABT)](https://github.com/WebAssembly/wabt), as well as the [dart SDK](https://github.com/dart-lang/sdk) installed (obviously).
-

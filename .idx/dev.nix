@@ -4,6 +4,7 @@
         /* Core Packages for fetching Dart*/
         pkgs.apt
         pkgs.unzip
+        pkgs.cmake
 
         /* Neovim because why not */
         pkgs.neovim

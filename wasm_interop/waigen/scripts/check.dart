@@ -35,6 +35,8 @@ void main(List<String> args) async {
     if (ret != 0) nothere.add('CMake');
   }
 
+  
+
   if (nothere.isNotEmpty) {
     mainLogger.severe("Error: Tools needed not installed! Please install required tools and try again.");
     mainLogger.severe("${styleBold.wrap("Requirements not installed:")} ${nothere.join(", ")}");

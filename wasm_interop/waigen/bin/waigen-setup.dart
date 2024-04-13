@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:io/io.dart';
+import 'package:path/path.dart' as p;
 
 void main(List<String> args) {
   final results = parser.parse(args);
@@ -56,16 +57,18 @@ void handle(ArgResults results, ArgParser parser) async {
 
   // Check if necessary tools are present on system
   _println("Checking if necessary tools are present on system");
-  List<String> args = [];
-  if (!results['cmake']) args.add('--top-level');
-  if (results.wasParsed('verbose')) args.add('--verbose');
-  if (Platform.isWindows) args.add('--win');
-  final res = await manager.spawnDetached('dart', ['scripts/check.dart'] + args);
-  res.stdout.transform(utf8.decoder).listen(stdout.write);
-  res.stderr.transform(utf8.decoder).listen(stderr.write);
-  if (await res.exitCode != 0) {
-    kill(_println, watch, success: false);
-    return;
+  {
+    List<String> args = [];
+    if (!results['cmake']) args.add('--top-level');
+    if (results.wasParsed('verbose')) args.add('--verbose');
+    if (Platform.isWindows) args.add('--win');
+    final res = await manager.spawnDetached('dart', ['scripts/check.dart'] + args);
+    res.stdout.transform(utf8.decoder).listen(stdout.write);
+    res.stderr.transform(utf8.decoder).listen(stderr.write);
+    if (await res.exitCode != 0) {
+      kill(_println, watch, success: false);
+      return;
+    }
   }
   
   
@@ -78,10 +81,36 @@ void handle(ArgResults results, ArgParser parser) async {
   _println(
     "Fetching WABT",
   );
+  {
+    List<String> args = [];
+    args.add(p.join(results['output'], 'wabt'));
+    if (results.wasParsed('verbose')) args.add('--verbose');
+    final res = await manager.spawnDetached('dart', ['scripts/fetch-wabt.dart'] + args);
+    res.stdout.transform(utf8.decoder).listen(stdout.write);
+    res.stderr.transform(utf8.decoder).listen(stderr.write);
+    if (await res.exitCode != 0) {
+      kill(_println, watch, success: false);
+      return;
+    }
+  }
   // Build WABT
   _println(
     "Building WABT",
   );
+  {
+    List<String> args = [];
+    args.add(p.join(results['output'], 'wabt'));
+    if (!results['cmake']) args.add('--top-level');
+    if (results.wasParsed('verbose')) args.add('--verbose');
+    if (Platform.isWindows) args.add('--win');
+    final res = await manager.spawnDetached('dart', ['scripts/build-wabt.dart'] + args);
+    res.stdout.transform(utf8.decoder).listen(stdout.write);
+    res.stderr.transform(utf8.decoder).listen(stderr.write);
+    if (await res.exitCode != 0) {
+      kill(_println, watch, success: false);
+      return;
+    }
+  }
 
   // End
   kill(_println, watch);
