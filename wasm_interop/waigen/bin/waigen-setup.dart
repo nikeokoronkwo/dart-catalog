@@ -21,6 +21,10 @@ void main(List<String> args) {
   return;
 }
 
+final _waigenDef = '${Platform.environment['HOME']}/.pub-cache/waigen';
+
+/// TODO: Implement
+void _makeWaigenDef() => Directory(_waigenDef).createSync(recursive: true);
 
 final parser = ArgParser()
   ..addFlag('help', abbr: 'h', help: 'Show this help message', negatable: false)
@@ -30,6 +34,7 @@ final parser = ArgParser()
   ..addFlag('cmake', help: 'Whether to use cmake for building the project', defaultsTo: true, negatable: true)
   ..addOption('output', abbr: 'o', defaultsTo: '.', help: 'Output directory')
   ..addFlag('check', abbr: 'c', help: 'Check if necessary tools are present on system', negatable: false)
+  ..addMultiOption('cmake-flags', help: "Pass the given flags to CMake [e.g -cmake-flags CMAKE_C_COMPILER=clang] (separate with commas)", defaultsTo: [], splitCommas: true, valueHelp: 'VAR=VALUE')
 ;
 
 const _version = "0.0.1";
@@ -103,6 +108,7 @@ void handle(ArgResults results, ArgParser parser) async {
     if (!results['cmake']) args.add('--top-level');
     if (results.wasParsed('verbose')) args.add('--verbose');
     if (Platform.isWindows) args.add('--win');
+    args.addAll(results['cmake-flags']);
     final res = await manager.spawnDetached('dart', ['scripts/build-wabt.dart'] + args);
     res.stdout.transform(utf8.decoder).listen(stdout.write);
     res.stderr.transform(utf8.decoder).listen(stderr.write);

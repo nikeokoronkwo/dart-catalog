@@ -8,6 +8,7 @@ import 'package:io/io.dart';
 import 'package:logging/logging.dart';
 
 import 'shared/logger.dart';
+import 'shared/perform.dart';
 
 void main(List<String> args) async {
   setUpLogger();
@@ -16,8 +17,23 @@ void main(List<String> args) async {
   cli.Logger verboselogger = args.contains('--verbose') ? cli.Logger.verbose() : cli.Logger.standard();
   Logger mainLogger = Logger(name);
 
-  verboselogger.stdout("Checking that all necessary tools are here");
   await fetchWabt(mainLogger, args, verboselogger);
+
+  await updateWabt(mainLogger, args, verboselogger);
+
+  exit(0);
+}
+
+Future<void> updateWabt(Logger logger, List<String> args, cli.Logger verboselogger) async {
+  logger.info("Updating WABT Submodules");
+  var manager = ProcessManager();
+  await perform('git', [
+      'submodule', 
+      'update', 
+      '--init'
+  ], manager, logger, verboselogger, dir: args[0], error: "Failed to checkout Submodules for WABT");
+
+  logger.fine("WABT Submodules Updated");
 }
 
 Future<void> fetchWabt(
@@ -25,30 +41,13 @@ Future<void> fetchWabt(
   List<String> args, 
   cli.Logger verboselogger
 ) async {
-  logger.info("Checking out Wabt");
+  logger.info("Fetching WABT");
   var manager = ProcessManager();
-  var result = await manager.spawnDetached(
-    'git', [
+  await perform('git', [
       'clone', 
       'https://github.com/WebAssembly/wabt.git', 
       args[0]
-    ]
-  );
-  result.stdout.transform(utf8.decoder).listen((event) {
-    logger.config(event);
-    verboselogger.trace(event);
-  });
-  result.stderr.transform(utf8.decoder).listen((event) {
-    verboselogger.trace(red.wrap(event)!);
-  });
-  if (await result.exitCode != 0) {
-    logger.severe("Failed to fetch WABT from Git: Process exited with exit code ${await result.exitCode}");
-    logger.severe("Use --verbose to check messages");
-    exit(1);
-  }
+    ], manager, logger, verboselogger, error: "Failed to fetch WABT from Git");
 
   logger.fine("WABT Gotten");
-  exit(0);
 }
-
-

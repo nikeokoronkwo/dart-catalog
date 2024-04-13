@@ -7,6 +7,7 @@ final error = red;
 final success = green;
 final fatal = red;
 final shout = magenta;
+final config = cyan;
 
 AnsiCode levelColour(Level level) {
   return switch (level) {
@@ -18,6 +19,7 @@ AnsiCode levelColour(Level level) {
     Level.FINEST => fatal,
     Level.OFF => fatal,
     Level.SHOUT => shout,
+    Level.CONFIG => config,
     Level() => throw UnimplementedError(),
   };
 }

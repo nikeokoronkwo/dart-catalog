@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 
 import 'helpers/command_check.dart';
 import 'shared/logger.dart';
+import 'shared/perform.dart';
 
 void main(List<String> args) async {
   setUpLogger();
@@ -17,7 +18,6 @@ void main(List<String> args) async {
   cli.Logger verboselogger = args.contains('--verbose') ? cli.Logger.verbose() : cli.Logger.standard();
   Logger mainLogger = Logger(name);
 
-  verboselogger.stdout("Checking that all necessary tools are here");
   await buildWabt(mainLogger, args, verboselogger);
 
   await exportToPath(mainLogger, args, verboselogger);
@@ -34,50 +34,34 @@ Future<void> exportToPath(
   var manager = ProcessManager();
   if (args.contains('--win') || Platform.isWindows) {
     mainLogger.info("Exporting to path for Windows");
-    var result = await manager.spawnDetached('setx', ['PATH', '"%PATH%;${p.absolute(args[0], 'build')}"']);
-    result.stdout.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      mainLogger.severe("An error occured while adding to PATH: Process exited with exit code ${await result.exitCode}");
-      mainLogger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform(
+      'setx', 
+      ['PATH', '"%PATH%;${p.normalize(p.absolute(args[0], !args.contains('--top-level') ? 'build' : 'out'))}"'], 
+      manager, mainLogger, verboselogger, 
+      error: "An error occured while adding to PATH"
+    );
     mainLogger.warning("waigen is only temporarily added to your PATH (i.e for this session)");
-    mainLogger.warning("To add permanently, add the path ${p.absolute(args[0], 'build')} to your PATH variable permanently.");
+    mainLogger.warning("To add permanently, add the path ${p.normalize(p.absolute(args[0], !args.contains('--top-level') ? 'build' : 'out'))} to your PATH variable permanently.");
     mainLogger.fine("WABT Has been exported to your PATH. Great!");
     exit(0);
 
   } else {
     mainLogger.info("Exporting to path for ${Platform.isMacOS ? "MacOS" : "Linux"}");
-    var result = await manager.spawnDetached('echo', ['"export \$PATH="\$PATH:"${p.absolute(args[0], 'build')}"" > ~/.${Platform.isLinux ? "bashrc" : "zshrc"}']);
-    result.stdout.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      mainLogger.severe("An error occured while adding to PATH: Process exited with exit code ${await result.exitCode}");
-      mainLogger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform(
+      'echo', 
+      ['"export \$PATH="\$PATH:"${p.normalize(p.absolute(args[0], !args.contains('--top-level') ? 'build' : 'out'))}""', '>> ~/.${Platform.isLinux ? "bashrc" : "zshrc"}'], 
+      manager, mainLogger, verboselogger,
+      error: "An error occured while adding to PATH"
+    );
 
-    result = await manager.spawnDetached('source', ['~/.${Platform.isLinux ? "bashrc" : "zshrc"}']);
-    result.stdout.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      mainLogger.severe("An error occured while adding to PATH: Process exited with exit code ${await result.exitCode}");
-      mainLogger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform(
+      'source', 
+      ['~/.${Platform.isLinux ? "bashrc" : "zshrc"}'], 
+      manager, mainLogger, verboselogger,
+      error: "An error occured while sourcing PATH",
+      warn: true,
+      warnMsg: "Run 'source ~/.${Platform.isLinux ? "bashrc" : "zshrc"} in order to effect the changes"
+    );
 
     mainLogger.fine("WABT Has been exported to your PATH. Great!");
   }
@@ -92,56 +76,26 @@ Future<void> buildWabt(
   var manager = ProcessManager();
   if (args.contains('--top-level')) {
     logger.info("Building WABT Using Make and Ninja");
-    var result = await manager.spawnDetached('make', [], workingDirectory: args[0]);
-    result.stdout.transform(utf8.decoder).listen((event) {
-      logger.config(event);
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      logger.severe("An error occured while building WABT with make and ninja: Process exited with exit code ${await result.exitCode}");
-      logger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform('make', [], manager, logger, verboselogger, error: "An error occured while building WABT with make and ninja", dir: args[0]);
     logger.fine("WABT Has been built. Great!");
   } else {
     logger.info("Building WABT Using CMake");
-    var result = await manager.spawnDetached('mkdir', ['build'], workingDirectory: args[0]);
-    result.stdout.transform(utf8.decoder).listen((event) {
-      logger.config(event);
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      logger.severe("An unknown error occured: Process exited with exit code ${await result.exitCode}");
-      logger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform('mkdir', ['build'], manager, logger, verboselogger, dir: args[0]);
 
     logger.info("Running CMake");
     List<String> cmakeArgs = [];
     if (args.contains('--win') || Platform.isWindows) {
       cmakeArgs.addAll([
-      '-DCMAKE_BUILD_TYPE' '=' 'RELEASE', '-G', 'Visual Studio 17 2022', ...args.where((element) => element.startsWith('-D')).map((e) => e.split('=')).reduce((value, element) => [...value, ...element])
-    ]);
+        '-DCMAKE_BUILD_TYPE' '=' 'RELEASE', '-G', 'Visual Studio 17 2022'
+      ]);
     }
-    result = await manager.spawnDetached('cmake', ['..'] + cmakeArgs, workingDirectory: p.join(args[0], 'build'));
-    result.stdout.transform(utf8.decoder).listen((event) {
-      logger.config(event);
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      logger.severe("An unknown error occured while running cmake: Process exited with exit code ${await result.exitCode}");
-      logger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    cmakeArgs.addAll(args.where((element) => element.startsWith('-D')));
+
+    await perform('cmake', ['..'] + cmakeArgs, 
+      manager, logger, verboselogger, 
+      dir: p.join(args[0], 'build'),
+      error: "An unknown error occured while running cmake"
+    );
 
     logger.info("Building using CMake");
     List<String> cmakeBuildArgs = [];
@@ -150,19 +104,11 @@ Future<void> buildWabt(
         '--config', 'RELEASE'
       ]);
     }
-    result = await manager.spawnDetached('cmake', ['--build', '.'] + cmakeBuildArgs, workingDirectory: p.join(args[0], 'build'));
-    result.stdout.transform(utf8.decoder).listen((event) {
-      logger.config(event);
-      verboselogger.trace(event);
-    });
-    result.stderr.transform(utf8.decoder).listen((event) {
-      verboselogger.trace(red.wrap(event)!);
-    });
-    if (await result.exitCode != 0) {
-      logger.severe("An unknown error occured while building with cmake: Process exited with exit code ${await result.exitCode}");
-      logger.severe("Use --verbose to check messages");
-      exit(1);
-    }
+    await perform('cmake', ['--build', '.'] + cmakeBuildArgs, 
+      manager, logger, verboselogger, 
+      dir: p.join(args[0], 'build'),
+      error: "An unknown error occured while building with cmake"
+    );
 
     logger.fine("WABT Has been built. Great!");
   }
