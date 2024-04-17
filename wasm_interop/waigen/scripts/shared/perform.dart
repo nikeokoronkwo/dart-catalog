@@ -28,17 +28,17 @@ Future<void> perform(
     }
   });
   result.stderr.transform(utf8.decoder).listen((event) {
-    verboselogger.trace(red.wrap(event.trim())!);
+    verboselogger.trace(red.wrap(event)!);
   });
   if (await result.exitCode != 0) {
     if (warn) {
       logger.warning("$error: Process exited with exit code ${await result.exitCode}");
-      logger.warning("Use --verbose to check messages");
+      if (verboselogger is! cli.VerboseLogger) logger.warning("Use --verbose to check messages");
 
       logger.warning(warnMsg);
     } else {
       logger.severe("$error: Process exited with exit code ${await result.exitCode}");
-      logger.severe("Use --verbose to check messages");
+      if (verboselogger is! cli.VerboseLogger) logger.severe("Use --verbose to check messages");
       exit(1);
     }
   }

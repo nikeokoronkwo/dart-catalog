@@ -121,7 +121,7 @@ Future<void> buildWabt(
     logger.fine("WABT Has been built. Great!");
   } else {
     logger.info("Building WABT Using CMake");
-    await perform('mkdir', ['build'], manager, logger, verboselogger, dir: args[0]);
+    if (!Directory(p.join(args[0], 'build')).existsSync()) await perform('mkdir', ['build'], manager, logger, verboselogger, dir: args[0]);
 
     logger.info("Running CMake");
     List<String> cmakeArgs = [];

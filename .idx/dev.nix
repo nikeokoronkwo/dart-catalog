@@ -4,7 +4,10 @@
         /* Core Packages for fetching Dart*/
         pkgs.apt
         pkgs.unzip
+
+        /* Packages for waigen */
         pkgs.cmake
+        pkgs.gcc
 
         /* Neovim because why not */
         pkgs.neovim
@@ -15,6 +18,7 @@
         /* WASM */
         pkgs.go
         pkgs.emscripten
+        
     ];
 
     env = {};

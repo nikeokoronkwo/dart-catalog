@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cli_util/cli_logging.dart' as cli;
-import 'package:io/ansi.dart';
 
 import 'package:io/io.dart';
 import 'package:logging/logging.dart';
@@ -43,11 +41,12 @@ Future<void> fetchWabt(
 ) async {
   logger.info("Fetching WABT");
   var manager = ProcessManager();
-  await perform('git', [
+  if (!Directory(args[0]).existsSync()) await perform('git', [
       'clone', 
       'https://github.com/WebAssembly/wabt.git', 
       args[0]
     ], manager, logger, verboselogger, error: "Failed to fetch WABT from Git");
+  else logger.fine("WABT already fetched");
 
   logger.fine("WABT Gotten");
 }

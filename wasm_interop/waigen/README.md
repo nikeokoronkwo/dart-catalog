@@ -73,7 +73,7 @@ dev_dependencies:
 
 Then run the following command with the given WebAssembly File and JavaScript File
 ```bash
-dart run waigen --jsigen --glue <JavaScript File> <WebAssembly File> 
+dart run waigen --jsigen <JavaScript File> <WebAssembly File> 
 ```
 
 This can be very useful if you plan on using dart files compiled to wasm with [`dart2wasm`](https://github.com/dart-lang/sdk/blob/main/pkg/dart2wasm/README.md). 
