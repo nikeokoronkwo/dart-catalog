@@ -28,7 +28,7 @@ If run like this, the generated code will be written to `main.wasm.dart` with de
 # Reads the wasm-config.yaml file in current directory and writes to file.dart
 dart run waigen main.wasm -o file.dart 
 
-# Uses the wasm-config.yaml file provided to --config option and writes to file provided in config
+# Uses the config.yaml file provided to --config option and writes to file provided in config
 dart run waigen --config config.yaml
 ```
 
